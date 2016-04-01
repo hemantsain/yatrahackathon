@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.text.TextUtils;
@@ -63,7 +64,7 @@ public class NotificationUtils {
 
 
         PendingIntent piCancel = PendingIntent.getBroadcast(context, 103, new Intent(context, NotificationBroadcast.class)
-                                                                .putExtra("type", 3), PendingIntent.FLAG_UPDATE_CURRENT);
+                                                                .putExtra("isCancel", true), PendingIntent.FLAG_UPDATE_CURRENT);
 
         expandedView.setOnClickPendingIntent(R.id.btnCancel, piBookNow);
 
@@ -104,7 +105,13 @@ public class NotificationUtils {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            showNotification(context, null);
+            Bundle bundle = intent.getExtras();
+            if(bundle.getBoolean("isCancel", false))
+                showNotification(context, null);
+            else
+            {
+
+            }
 
         }
     }
