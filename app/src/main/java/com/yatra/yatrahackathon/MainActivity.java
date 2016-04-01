@@ -8,6 +8,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import com.yatra.yatrahackathon.notification.NotificationUtils;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     @Override
@@ -42,6 +47,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                Date d = new Date();
+                NotificationUtils.setAlarm(MainActivity.this, d.getTime());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             return true;
         }
 
