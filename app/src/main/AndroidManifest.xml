@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.yatra.yatrahackathon">
+    package="com.yatra.yatrahackathon" >
 
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
@@ -28,7 +28,12 @@
         <activity android:name=".MainActivity"></activity>
         <activity android:name=".AmbulancePosition"></activity>
 
-        <receiver android:name=".notification.NotificationUtils$NotificationBroadcast"></receiver>
+        <receiver android:name=".notification.NotificationUtils$NotificationBroadcast" />
+
+        <activity
+            android:name=".NavigationDrawerActivity"
+            android:label="@string/title_activity_navigation_drawer"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
