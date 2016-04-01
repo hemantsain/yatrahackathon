@@ -16,6 +16,7 @@ import android.support.v4.app.TaskStackBuilder;
 import android.text.TextUtils;
 import android.widget.RemoteViews;
 
+import com.yatra.yatrahackathon.AmbulancePosition;
 import com.yatra.yatrahackathon.BookCabActivity;
 import com.yatra.yatrahackathon.MainActivity;
 import com.yatra.yatrahackathon.R;
@@ -51,13 +52,13 @@ public class NotificationUtils {
         expandedView.setTextViewText(R.id.tvQuestion, "Hey");
 
 
-        PendingIntent piBookNow = PendingIntent.getActivity(context, 101, new Intent(context, BookCabActivity.class)
+        PendingIntent piBookNow = PendingIntent.getActivity(context, 101, new Intent(context, AmbulancePosition.class)
                                                                           .putExtra("type", 1), PendingIntent.FLAG_UPDATE_CURRENT, null);
 
         expandedView.setOnClickPendingIntent(R.id.btnBookNow, piBookNow);
 
 
-        PendingIntent piChoose = PendingIntent.getActivity(context, 102, new Intent(context, BookCabActivity.class)
+        PendingIntent piChoose = PendingIntent.getActivity(context, 102, new Intent(context, AmbulancePosition.class)
                 .putExtra("type", 2), PendingIntent.FLAG_UPDATE_CURRENT, null);
 
         expandedView.setOnClickPendingIntent(R.id.btnChoose, piBookNow);
