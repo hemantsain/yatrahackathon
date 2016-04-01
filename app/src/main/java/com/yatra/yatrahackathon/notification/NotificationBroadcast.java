@@ -20,7 +20,8 @@ public class NotificationBroadcast extends BroadcastReceiver
         }
         else
         {
-            NotificationUtils.showNotification(context, null);
+            String msg = bundle.getString("message");
+            NotificationUtils.showNotification(context, msg);
         }
 
     }

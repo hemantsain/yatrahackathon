@@ -46,7 +46,7 @@ public class SMSreceiver extends BroadcastReceiver {
                     try {
                         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
                         Date d = sdf.parse(date+" "+time);
-                        NotificationUtils.setAlarm(context, d.getTime());
+                        NotificationUtils.setAlarm(context, d.getTime() - 2*60*60*1000, "You have flight "+flight+" at "+time+". Do you want to book a cab.");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

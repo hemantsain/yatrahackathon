@@ -62,12 +62,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
+        Intent intent = null;
         switch (view.getId()) {
             case R.id.rl_flights:
-                Intent intent = new Intent(MainActivity.this, BookFlightActivity.class);
+                intent = new Intent(MainActivity.this, BookFlightActivity.class);
                 startActivity(intent);
                 break;
             case R.id.rl_hotels:
+                intent = new Intent(MainActivity.this, BookFlightActivity.class);
+                startActivity(intent);
                 break;
             case R.id.rl_holidays:
                 break;

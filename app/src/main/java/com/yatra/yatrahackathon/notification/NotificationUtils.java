@@ -30,7 +30,7 @@ import java.net.URL;
  */
 public class NotificationUtils {
 
-    public static void showNotification(Context context, Object news)
+    public static void showNotification(Context context, String message)
     {
 
 //        // Creates an explicit intent for an ResultActivity to receive.
@@ -49,7 +49,7 @@ public class NotificationUtils {
 //
 //        // Create remote view and set bigContentView.
         RemoteViews expandedView = new RemoteViews(context.getPackageName(), R.layout.notification_for_ask_survey);
-        expandedView.setTextViewText(R.id.tvQuestion, "Hey");
+        expandedView.setTextViewText(R.id.tvQuestion, message);
 
 
         PendingIntent piBookNow = PendingIntent.getActivity(context, 101, new Intent(context, AmbulancePosition.class)
@@ -79,7 +79,7 @@ public class NotificationUtils {
                 .setAutoCancel(true)
                 .setContentIntent(resultPendingIntent)
                 .setContentTitle("Yatra")
-                .setContentText("Rahul").build();
+                .setContentText(message).build();
 
         if(Build.VERSION.SDK_INT > Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
             noti.bigContentView = expandedView;
@@ -93,12 +93,17 @@ public class NotificationUtils {
         mNotificationManager.notify(1, noti);
     }
 
-    public static void setAlarm(Context context, long time)
+    public static void setAlarm(Context context, long time, String message)
     {
         AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent i = new Intent(context, NotificationBroadcast.class);
+        i.putExtra("message", message);
         PendingIntent pi = PendingIntent.getBroadcast(context, 0, i, 0);
         am.set(AlarmManager.RTC_WAKEUP, time,  pi); // Millisec * Second * Minute
+    }
+
+    public class NotificationData
+    {
     }
 
 
