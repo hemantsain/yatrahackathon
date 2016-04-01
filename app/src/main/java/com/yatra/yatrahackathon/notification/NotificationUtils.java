@@ -1,8 +1,10 @@
 package com.yatra.yatrahackathon.notification;
 
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,6 +15,7 @@ import android.support.v4.app.TaskStackBuilder;
 import android.text.TextUtils;
 import android.widget.RemoteViews;
 
+import com.yatra.yatrahackathon.BookCabActivity;
 import com.yatra.yatrahackathon.MainActivity;
 import com.yatra.yatrahackathon.R;
 
@@ -25,18 +28,9 @@ import java.net.URL;
  */
 public class NotificationUtils {
 
-    private void showNewData(Context context, Object news)
+    private static void showNotification(Context context, Object news)
     {
-//        Bitmap remote_picture = null;
-//        try {
-//            String mediaUrl = news.mediaUrl;
-//            if(!TextUtils.isEmpty(news.videoRef) && !news.videoRef.equalsIgnoreCase("null")) {
-//                mediaUrl = String.format(MynitApplication.YOUTUBE_URL, news.videoRef);
-//            }
-//            remote_picture = BitmapFactory.decodeStream((InputStream) new URL(mediaUrl).getContent());
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+
 //        // Creates an explicit intent for an ResultActivity to receive.
         Intent resultIntent = new Intent(context, MainActivity.class);
 //        resultIntent.putExtra("news", news);
@@ -54,6 +48,28 @@ public class NotificationUtils {
 //        // Create remote view and set bigContentView.
         RemoteViews expandedView = new RemoteViews(context.getPackageName(), R.layout.notification_for_ask_survey);
         expandedView.setTextViewText(R.id.tvQuestion, "Hey");
+
+
+        PendingIntent piBookNow = PendingIntent.getActivity(context, 101, new Intent(context, BookCabActivity.class)
+                                                                          .putExtra("type", 1), PendingIntent.FLAG_UPDATE_CURRENT, null);
+
+        expandedView.setOnClickPendingIntent(R.id.btnBookNow, piBookNow);
+
+
+        PendingIntent piChoose = PendingIntent.getActivity(context, 102, new Intent(context, BookCabActivity.class)
+                .putExtra("type", 2), PendingIntent.FLAG_UPDATE_CURRENT, null);
+
+        expandedView.setOnClickPendingIntent(R.id.btnChoose, piBookNow);
+
+
+        PendingIntent piCancel = PendingIntent.getBroadcast(context, 103, new Intent(context, NotificationBroadcast.class)
+                                                                .putExtra("type", 3), PendingIntent.FLAG_UPDATE_CURRENT);
+
+        expandedView.setOnClickPendingIntent(R.id.btnCancel, piBookNow);
+
+
+
+
 //        expandedView.setImageViewBitmap(R.id.ivMediaUrl, remote_picture);
 
         Notification noti = new NotificationCompat.Builder(context)
@@ -75,9 +91,23 @@ public class NotificationUtils {
         mNotificationManager.notify(1, noti);
     }
 
-    public void setAlarm()
+    public static void setAlarm(Context context, long time)
     {
-
+        AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        Intent i = new Intent(context, NotificationBroadcast.class);
+        PendingIntent pi = PendingIntent.getBroadcast(context, 0, i, 0);
+        am.set(AlarmManager.RTC_WAKEUP, time,  pi); // Millisec * Second * Minute
     }
+
+    public class NotificationBroadcast extends BroadcastReceiver
+    {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            showNotification(context, null);
+
+        }
+    }
+
 
 }
