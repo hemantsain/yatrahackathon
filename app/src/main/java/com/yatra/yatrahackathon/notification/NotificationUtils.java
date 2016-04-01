@@ -29,7 +29,7 @@ import java.net.URL;
  */
 public class NotificationUtils {
 
-    private static void showNotification(Context context, Object news)
+    public static void showNotification(Context context, Object news)
     {
 
 //        // Creates an explicit intent for an ResultActivity to receive.
@@ -100,21 +100,6 @@ public class NotificationUtils {
         am.set(AlarmManager.RTC_WAKEUP, time,  pi); // Millisec * Second * Minute
     }
 
-    public class NotificationBroadcast extends BroadcastReceiver
-    {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-
-            Bundle bundle = intent.getExtras();
-            if(bundle.getBoolean("isCancel", false))
-                showNotification(context, null);
-            else
-            {
-
-            }
-
-        }
-    }
 
 
 }
