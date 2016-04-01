@@ -1,6 +1,7 @@
 package com.yatra.yatrahackathon;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -24,16 +25,16 @@ public class SplashActivity extends Activity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                QueryServer q = new QueryServer(SplashActivity.this, new ResultHandler() {
+                /*QueryServer q = new QueryServer(SplashActivity.this, new ResultHandler() {
                     @Override
                     public void onResult(boolean isError, Object object) {
 
                     }
                 }, WSActions.GET_VEHICLE_LIST);
-                q.execute("");
+                q.execute("");*/
 
-                /*Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                startActivity(intent);*/
+                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                startActivity(intent);
             }
         }, SPLASH_TIME_OUT_PERIOD);
     }
