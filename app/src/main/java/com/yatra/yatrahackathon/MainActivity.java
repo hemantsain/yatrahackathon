@@ -50,7 +50,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             try {
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
                 Date d = new Date();
-                NotificationUtils.setAlarm(MainActivity.this, d.getTime());
             } catch (Exception e) {
                 e.printStackTrace();
             }
