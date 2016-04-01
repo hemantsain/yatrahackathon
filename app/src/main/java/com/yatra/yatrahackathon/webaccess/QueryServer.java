@@ -3,7 +3,7 @@ package com.yatra.yatrahackathon.webaccess;
 import android.content.Context;
 import android.os.AsyncTask;
 
-public class QueryServer extends AsyncTask<String, Void, Object> {
+public class QueryServer extends AsyncTask<Object, Void, Object> {
 
 	String cypherQuery = "";
 	ResultHandler caller;
@@ -33,7 +33,7 @@ public class QueryServer extends AsyncTask<String, Void, Object> {
 	}
 
 	@Override
-	protected Object doInBackground(String... params) {
-		return serverAccess.sendRequestToServer(params);
+	protected Object doInBackground(Object... params) {
+		return serverAccess.sendRequestToServer(params[0]);
 	}
 }

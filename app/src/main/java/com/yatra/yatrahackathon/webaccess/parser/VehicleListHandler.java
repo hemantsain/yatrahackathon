@@ -1,13 +1,14 @@
 package com.yatra.yatrahackathon.webaccess.parser;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
+import com.yatra.yatrahackathon.dao.VehicleApproximateRate;
+import com.yatra.yatrahackathon.dao.VehicleDao;
+import com.yatra.yatrahackathon.dao.VehicleRate;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
-import com.yatra.yatrahackathon.dao.VehicleDao;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class VehicleListHandler extends BaseHandler
@@ -16,27 +17,65 @@ public class VehicleListHandler extends BaseHandler
 	public int response_code = -1;
     public String response_message = null;
     public String response_message_mobile_holder_id = null;
+	List<VehicleDao> listVehicle;
     VehicleDao vehicleDao;
 
     @Override
 	public Object getData()
 	{
-		return vehicleDao;
+		return listVehicle;
 	}
 
 	@Override
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 		super.startElement(uri, localName, qName, attributes);
-		if(localName.equalsIgnoreCase(""))
+
+		if(localName.equalsIgnoreCase("VehicleDateLocation")) {
+			listVehicle = new ArrayList<VehicleDao>();
+		}
+		if(localName.equalsIgnoreCase("Vehicle"))
 		{
-			buffer = new StringBuffer();
+			vehicleDao = new VehicleDao();
+			vehicleDao.setVendorCode(attributes.getValue("VendorCode"));
+			vehicleDao.setAirConditioning(attributes.getValue("AirConditioning"));
+			vehicleDao.setTransmissionType(attributes.getValue("TransmissionType"));
+			vehicleDao.setVehicleClass(attributes.getValue("VehicleClass"));
+			vehicleDao.setCategory(attributes.getValue("Category"));
+			vehicleDao.setDoorCount(attributes.getValue("DoorCount"));
+			vehicleDao.setLocation(attributes.getValue("Location"));
+			vehicleDao.setVendorLocationKey(attributes.getValue("VendorLocationKey"));
+			vehicleDao.setDescription(attributes.getValue("Description"));
+			vehicleDao.setReturnAtPickup(attributes.getValue("ReturnAtPickup"));
+
+			listVehicle.add(vehicleDao);
+//			buffer = new StringBuffer();
+		}
+		if(localName.equalsIgnoreCase("VehicleRate")) {
+			VehicleRate vehicleRate = new VehicleRate();
+			vehicleRate.setRatePeriod(attributes.getValue("RatePeriod"));
+			vehicleRate.setUnlimitedMileage(attributes.getValue("UnlimitedMileage"));
+			vehicleRate.setUnits(attributes.getValue("Units"));
+			vehicleRate.setRateSource(attributes.getValue("RateSource"));
+			vehicleRate.setRateAvailability(attributes.getValue("RateAvailability"));
+			vehicleRate.setRateCode(attributes.getValue("RateCode"));
+			vehicleRate.setRateCategory(attributes.getValue("RateCategory"));
+			vehicleDao.setVehicleRate(vehicleRate);
+		}
+		if(localName.equalsIgnoreCase("ApproximateRate")) {
+			VehicleApproximateRate vehicleApproximateRate = new VehicleApproximateRate();
+			vehicleApproximateRate.setRateForPeriod(attributes.getValue("RateForPeriod"));
+			vehicleApproximateRate.setBaseRate(attributes.getValue("BaseRate"));
+			vehicleApproximateRate.setEstimatedTotalAmount(attributes.getValue("EstimatedTotalAmount"));
+			vehicleApproximateRate.setDropOffCharge(attributes.getValue("DropOffCharge"));
+			vehicleApproximateRate.setExtraMileageCharge(attributes.getValue("ExtraMileageCharge"));
+			vehicleDao.setVehicleApproximateRate(vehicleApproximateRate);
 		}
 	}
 
     @Override
     public void endElement(String uri, String localName, String qName)
     		throws SAXException {
-    	if(localName.equalsIgnoreCase(""))
+    	if(localName.equalsIgnoreCase("VehicleDateLocation"))
 		{
 
 		}

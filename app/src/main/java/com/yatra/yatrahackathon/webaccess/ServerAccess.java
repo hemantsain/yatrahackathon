@@ -15,6 +15,7 @@ public class ServerAccess {
 	WSActions action;
 	Context context;
 
+	private String URL = "https://apac.universal-api.pp.travelport.com/B2BGateway/connect/uAPI/VehicleService";
 	String cypherQuery = "";
 
 	public ServerAccess(Context context, ResultHandler caller, WSActions action) {
@@ -27,13 +28,11 @@ public class ServerAccess {
 
 		cypherQuery = BuildRequest.getRequestString(action, params);
 
-		if (cypherQuery.startsWith("error:"))
-			return cypherQuery;
 
 		InputStream responseString = null;
 
 		try {
-			responseString = HttpHelper.sendGet(cypherQuery);
+			responseString = HttpHelper.sendGet(URL, cypherQuery);
 
 
 		} catch (Exception e) {
