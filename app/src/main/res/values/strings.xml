@@ -1,10 +1,10 @@
 <resources>
-    <string name="app_name">YatraHackathon</string>
+    <string name="app_name">YoYatra</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Check In</string>
 
-    <string name="splash_title">Yatra SiteSeen</string>
+
     <string name="title_activity_navigation_drawer">NavigationDrawerActivity</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>

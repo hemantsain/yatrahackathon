@@ -14,7 +14,10 @@ import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 
@@ -48,33 +51,67 @@ public class AmbulancePosition extends Activity implements LocationListener {
         btnBookCab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                double newLatitude = latLng.latitude + 0.018;
-                double newLongitude = latLng.longitude + 0.018;
-                for (int i = 17; i >= 0; i--) {
-                    newLatitude -= 0.001;
-                    newLongitude -= 0.001;
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        double newLatitude = latLng.latitude + 0.018;
+                        double newLongitude = latLng.longitude + 0.018;
+                        for (int i = 17; i >= 0; i--) {
+                            newLatitude -= 0.001;
+                            newLongitude -= 0.001;
 
 //                    if (markerOptionsForCab != null) {
-                        markerOptionsForCab.position(new LatLng(newLatitude, newLongitude));
+//                            markerOptionsForCab.position(new LatLng(newLatitude, newLongitude));
 //                        map.addMarker(new MarkerOptions().title(name).position(new LatLng(newLatitude, newLongitude)).icon(BitmapDescriptorFactory.fromResource(R.drawable.transport)));
 //                    }
+                            Message message = Message.obtain();
+                            message.arg1 = 1;
+                            message.obj = new LatLng(newLatitude, newLongitude);
+                            handler.sendMessage(message);
 
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                            try {
+                                Thread.sleep(300);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+
+                            if (i == 0) {
+                                Message message1 = Message.obtain();
+                                message1.arg1 = 2;
+                                handler.sendMessage(message1);
+                            }
+                        }
                     }
-
-                    if (i == 0) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(AmbulancePosition.this).setTitle("Alert").setMessage("You cab has been reached to your door!\nTime to move on!");
-
-                        Dialog dialog = builder.create();
-                        dialog.show();
-                    }
-                }
+                });
+                thread.start();
             }
         });
 	}
+
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.arg1) {
+                case 1:
+                    LatLng newUpdatedLatLng = (LatLng) msg.obj;
+
+                    map.clear();
+                    map.addMarker(new MarkerOptions().title(name).position(newUpdatedLatLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.transport)));
+                    break;
+
+                case 2:
+                    AlertDialog.Builder builder = new AlertDialog.Builder(AmbulancePosition.this).setTitle("Alert").setMessage("You cab has been reached to your door!\nTime to move on!");
+                    builder.setPositiveButton("OK", null);
+
+                    Dialog dialog = builder.create();
+                    dialog.show();
+                    break;
+            }
+
+
+            super.handleMessage(msg);
+        }
+    };
 
 	private void setAmbLocation(double lat, double lon) {
 		LatLng latLng = new LatLng(lat, lon);
@@ -84,7 +121,16 @@ public class AmbulancePosition extends Activity implements LocationListener {
 
 	}
 
-	@Override
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        if (locationManager != null) {
+            locationManager.removeUpdates(this);
+        }
+    }
+
+    @Override
 	public void onLocationChanged(Location location) {
 		if (latLng == null) {
 			latLng = new LatLng(location.getLatitude(), location.getLongitude());
@@ -102,13 +148,6 @@ public class AmbulancePosition extends Activity implements LocationListener {
             markerOptionsForCab = new MarkerOptions().title(name).position(new LatLng(latLng.latitude + 0.018, latLng.longitude + 0.018)).icon(BitmapDescriptorFactory.fromResource(R.drawable.transport));
             map.addMarker(markerOptionsForCab);
 		}
-	}
-
-	@Override
-	protected void onStop() {
-		super.onStop();
-		if(locationManager != null)
-			locationManager.removeUpdates(this);
 	}
 
 	@Override

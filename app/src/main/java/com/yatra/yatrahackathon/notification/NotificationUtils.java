@@ -4,26 +4,17 @@ import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Build;
-import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
-import android.text.TextUtils;
 import android.widget.RemoteViews;
 
 import com.yatra.yatrahackathon.AmbulancePosition;
-import com.yatra.yatrahackathon.BookCabActivity;
 import com.yatra.yatrahackathon.MainActivity;
+import com.yatra.yatrahackathon.NearbyOfferActivity;
 import com.yatra.yatrahackathon.R;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 
 /**
  * Created by ibm_admin on 4/1/2016.
@@ -34,7 +25,7 @@ public class NotificationUtils {
     {
 
 //        // Creates an explicit intent for an ResultActivity to receive.
-        Intent resultIntent = new Intent(context, MainActivity.class);
+        Intent resultIntent = new Intent(context, NearbyOfferActivity.class);
 //        resultIntent.putExtra("news", news);
         resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP );
         // This ensures that the back button follows the recommended convention for the back key.
