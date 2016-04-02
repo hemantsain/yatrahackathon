@@ -10,9 +10,15 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -20,7 +26,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class AmbulancePosition extends Activity implements LocationListener {
+public class AmbulancePosition extends Activity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
 	private GoogleMap map;
 	double coordinates[];
@@ -85,6 +91,8 @@ public class AmbulancePosition extends Activity implements LocationListener {
                 thread.start();
             }
         });
+
+		buildGoogleApiClient();
 	}
 
     Handler handler = new Handler() {
@@ -131,22 +139,22 @@ public class AmbulancePosition extends Activity implements LocationListener {
 
     @Override
 	public void onLocationChanged(Location location) {
-		if (latLng == null) {
-			latLng = new LatLng(location.getLatitude(), location.getLongitude());
-
-			// Showing the current location in Google Map
-			map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-
-			// Zoom in the Google Map
-			map.animateCamera(CameraUpdateFactory.zoomTo(15));
-
-			map.clear();
-			map.addMarker(new MarkerOptions().title(name).position(latLng));
-
-            // Show cab icon
-            markerOptionsForCab = new MarkerOptions().title(name).position(new LatLng(latLng.latitude + 0.018, latLng.longitude + 0.018)).icon(BitmapDescriptorFactory.fromResource(R.drawable.transport));
-            map.addMarker(markerOptionsForCab);
-		}
+//		if (latLng == null) {
+//			latLng = new LatLng(location.getLatitude(), location.getLongitude());
+//
+//			// Showing the current location in Google Map
+//			map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+//
+//			// Zoom in the Google Map
+//			map.animateCamera(CameraUpdateFactory.zoomTo(15));
+//
+//			map.clear();
+//			map.addMarker(new MarkerOptions().title(name).position(latLng));
+//
+//            // Show cab icon
+//            markerOptionsForCab = new MarkerOptions().title(name).position(new LatLng(latLng.latitude + 0.018, latLng.longitude + 0.018)).icon(BitmapDescriptorFactory.fromResource(R.drawable.transport));
+//            map.addMarker(markerOptionsForCab);
+//		}
 	}
 
 	@Override
@@ -163,5 +171,68 @@ public class AmbulancePosition extends Activity implements LocationListener {
 	public void onProviderDisabled(String provider) {
 
 	}
+	protected Location mCurrentLocation;
+	@Override
+	public void onConnected(Bundle bundle) {
+		if (mCurrentLocation == null) {
+			mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+			updateLocation();
+		}
+	}
 
+	private void updateLocation() {
+		if(mCurrentLocation!=null)
+			if (latLng == null) {
+				latLng = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+
+				// Showing the current location in Google Map
+				map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+
+				// Zoom in the Google Map
+				map.animateCamera(CameraUpdateFactory.zoomTo(15));
+
+				map.clear();
+				map.addMarker(new MarkerOptions().title(name).position(latLng));
+
+				// Show cab icon
+				markerOptionsForCab = new MarkerOptions().title(name).position(new LatLng(latLng.latitude + 0.018, latLng.longitude + 0.018)).icon(BitmapDescriptorFactory.fromResource(R.drawable.transport));
+				map.addMarker(markerOptionsForCab);
+			}
+		{
+
+		}
+	}
+
+	@Override
+	public void onConnectionSuspended(int i) {
+
+	}
+
+	@Override
+	public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+	}
+	public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
+	public static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS =
+			UPDATE_INTERVAL_IN_MILLISECONDS / 2;
+
+	GoogleApiClient mGoogleApiClient;
+	LocationRequest mLocationRequest;
+	protected synchronized void buildGoogleApiClient() {
+		// Log.i("mGoogleApiClient", "Building GoogleApiClient");
+		mGoogleApiClient = new GoogleApiClient.Builder(this)
+				.addConnectionCallbacks(this)
+				.addOnConnectionFailedListener(this)
+				.addApi(LocationServices.API)
+				.build();
+		createLocationRequest();
+		mGoogleApiClient.connect();
+	}
+
+	protected void createLocationRequest() {
+		mLocationRequest = new LocationRequest();
+		mLocationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
+		mLocationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
+		mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+	}
 }
