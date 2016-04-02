@@ -38,6 +38,9 @@
         <activity android:name=".BookingSuccessActivity" />
         <activity android:name=".AmbulancePosition"></activity>
         <activity android:name=".BookFlightActivity"></activity>
+        <activity android:name=".NearbyOfferActivity"></activity>
+
+
         <receiver android:name=".notification.NotificationBroadcast" />
 
 

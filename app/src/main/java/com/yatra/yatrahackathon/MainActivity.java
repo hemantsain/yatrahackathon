@@ -48,8 +48,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             try {
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-                Date d = new Date();
+                String message = "It's lunch time and we have best offer for you in your nearby area.";
+                NotificationUtils.showNotificationOffer(MainActivity.this, message);
             } catch (Exception e) {
                 e.printStackTrace();
             }
