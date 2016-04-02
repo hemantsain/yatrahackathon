@@ -10,9 +10,6 @@ import android.widget.RelativeLayout;
 
 import com.yatra.yatrahackathon.notification.NotificationUtils;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     @Override
@@ -68,12 +65,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(intent);
                 break;
             case R.id.rl_hotels:
-                intent = new Intent(MainActivity.this, BookFlightActivity.class);
-                startActivity(intent);
                 break;
             case R.id.rl_holidays:
                 break;
             case R.id.rl_taxi:
+                intent = new Intent(MainActivity.this, AmbulancePosition.class);
+                startActivity(intent);
                 break;
         }
     }
