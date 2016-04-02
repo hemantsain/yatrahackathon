@@ -48,7 +48,7 @@ public class NotificationUtils {
         PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 //
 //        // Create remote view and set bigContentView.
-        RemoteViews expandedView = new RemoteViews(context.getPackageName(), R.layout.notification_for_ask_survey);
+        RemoteViews expandedView = new RemoteViews(context.getPackageName(), R.layout.notification_for_ask_survey1);
         expandedView.setTextViewText(R.id.tvQuestion, message);
 
 

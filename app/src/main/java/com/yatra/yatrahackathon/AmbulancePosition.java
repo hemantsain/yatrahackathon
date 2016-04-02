@@ -105,6 +105,13 @@ public class AmbulancePosition extends Activity implements LocationListener {
 	}
 
 	@Override
+	protected void onStop() {
+		super.onStop();
+		if(locationManager != null)
+			locationManager.removeUpdates(this);
+	}
+
+	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {
 
 	}
